@@ -1,9 +1,9 @@
 import React from "react";
 import Task from "./Task";
 
-function TaskList({filteredTasks, handleDelClick}) {
+function TaskList({tasks, handleDelClick}) {
 
-  const taskList = filteredTasks.map(taskObj => {
+  const taskList = tasks.map(taskObj => {
     return <Task key={taskObj.text} text={taskObj.text} category={taskObj.category} handleDelClick={handleDelClick} />
   });
 

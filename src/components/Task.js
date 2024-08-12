@@ -3,7 +3,7 @@ import React from "react";
 function Task({text, category, handleDelClick}) {
 
   return (
-    <div className="task">
+    <div className="task" id={text}>
       <div className="label">{category}</div>
       <div className="text">{text}</div>
       <button className="delete" onClick={handleDelClick}>X</button>

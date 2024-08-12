@@ -11,22 +11,11 @@ function App() {
 
   const [tasks, setTasks] = useState(TASKS);
   const [filteredTasks, setFilteredTasks] = useState(tasks);
-  const [formData, setFormData] = useState({text: '', category: ''});
 
   const handleCatClick = (e) => {
-    updateClassNames(e);
-    const filterCat = e.target.innerText;
-    console.log(filterCat)
-    const filteredTaskObj = tasks.filter((task) => task.category === filterCat || filterCat === 'All')
+    const filteredTaskObj = tasks.filter((task) => task.category === e.target.name || e.target.name === 'All')
     setFilteredTasks(filteredTaskObj);
-  }
-
-  const handleDelClick = (e) => {
-    const delItemName = e.target.parentElement.querySelector('.text').innerText;
-    const updatedTasks = tasks.filter((task) => task.text !== delItemName);
-    const updatedFilteredTasks = filteredTasks.filter((task) => task.text !== delItemName);
-    setTasks(updatedTasks);
-    setFilteredTasks(updatedFilteredTasks);
+    updateClassNames(e);
   }
 
   const updateClassNames = (e) => {
@@ -35,13 +24,19 @@ function App() {
     e.target.className = 'selected';
   }
 
-  const onTaskFormSubmit = (data) => {
-    if (data.category) {
-      console.log(data.category);
-      setTasks([data,...tasks]);
+  const handleDelClick = (e) => {
+    const updatedTasks = tasks.filter((task) => task.text !== e.target.parentElement.id);
+    setTasks(updatedTasks);
+    const updatedFilteredTasks = filteredTasks.filter((task) => task.text !== e.target.parentElement.id);
+    setFilteredTasks(updatedFilteredTasks);
+  }
+
+  const onTaskFormSubmit = (formData) => {
+    if (formData.category) {
+      console.log(formData.category);
+      setTasks([formData,...tasks]);
       const selectedElement = document.querySelector('button.selected');
-      if (! selectedElement || (selectedElement && (selectedElement.innerText === data.category || selectedElement.innerText === 'All'))) setFilteredTasks([data,...filteredTasks]);
-      setFormData({text: '', category: ''});
+      if (! selectedElement || (selectedElement && (selectedElement.innerText === formData.category || selectedElement.innerText === 'All'))) setFilteredTasks([formData,...filteredTasks]);
     } else {
       alert('Please select a category');
     }
@@ -51,8 +46,8 @@ function App() {
     <div className="App">
       <h2>My tasks</h2>
       <CategoryFilter categories={CATEGORIES} onCatClick={handleCatClick} />
-      <NewTaskForm categories={CATEGORIES} onTaskFormSubmit={onTaskFormSubmit} formData={formData} setFormData={setFormData} />
-      <TaskList filteredTasks={filteredTasks} handleDelClick={handleDelClick} />
+      <NewTaskForm categories={CATEGORIES} onTaskFormSubmit={onTaskFormSubmit} />
+      <TaskList tasks={filteredTasks} handleDelClick = {handleDelClick} />
     </div>
   );
 }
